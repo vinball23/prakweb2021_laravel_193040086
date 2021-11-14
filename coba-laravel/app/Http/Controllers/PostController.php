@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
+// use App\Models\User;
+// use App\Models\Category;
+// use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class PostController extends Controller
-{
+class PostController extends Controller{
     public function index() {
         return view('posts', [
             "title" => "All Posts",
-            // "posts" => Post::all()
-            "posts" => Post::with(['author', 'category'])->latest()->get()
+            "active" => 'posts',
+            "posts" => Post::latest()->filter(request(['search','category']))->get()
         ]);
     }
 
@@ -19,6 +21,7 @@ class PostController extends Controller
     public function show(Post $post) {
         return view('post', [
             "title" => "Single Post",
+            "active" => 'posts',
             "post" => $post
         ]);
     }
